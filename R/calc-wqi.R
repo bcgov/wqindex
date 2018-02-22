@@ -255,7 +255,7 @@ calc_wqi <- function (x, by = NULL,
 
   check_rows(x)
   if(!any(c("LowerLimit", "UpperLimit") %in% colnames(x)))
-    x <- calc_limits(x, by = by, messages = messages)
+    error("x must contain at least one of LowerLimit and UpperLimit columns")
 
   check_columns(x, c("Variable", "Value", "UpperLimit"))
 
