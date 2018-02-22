@@ -3,44 +3,27 @@
 wqbc
 ====
 
-<a rel="Exploration" href="https://github.com/BCDevExchange/docs/blob/master/discussion/projectstates.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>[![Travis-CI Build Status](https://travis-ci.org/bcgov/wqbc.svg?branch=master)](https://travis-ci.org/bcgov/wqbc)
+<a rel="Exploration" href="https://github.com/BCDevExchange/docs/blob/master/discussion/projectstates.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>
 
 Overview
 --------
 
-The `wqbc` R package calculates water quality thresholds and water quality indices and plots water quality indices spatially and temporally for British Columbia.
+The `wqindex` R package calculates the [CCME Water Quality Index](http://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html) and plots water quality indices spatially and temporally for British Columbia.
 
-This package was written for the B.C. Ministry of Environment by [Poisson Consulting](http://www.poissonconsulting.ca/). Ministry of Environment staff maintain the package.
-
-Usage
------
-
-For information on use, please see the [vignette](https://htmlpreview.github.com/?https://github.com/bcgov/wqbc/master/inst/doc/wqbc.html). In your R session, you can type `vignette("wqbc")` to see the vignette.
+This functions in this package were originally written as a part of the [wqbc](https://github.com/bcgov/wqbc) package for the B.C. Ministry of Environment by [Poisson Consulting](http://www.poissonconsulting.ca/). Ministry of Environment staff maintain the package. The original **wqbc** package is currently being split into two smaller pacakge. **wqbc** will be for cleaning, processing, and calculating limits/thresholds for water qualtity data, while this package will be for calculating the [CCME Water Quality Index](http://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html).
 
 Install
 -------
 
-To install the latest version of wqbc:
-
-``` r
-# install the devtools package if it's not already installed
-# install.packages("devtools")
-library(devtools)
-install_github("bcgov/wqbc", build_vignettes = TRUE)
-# Using `build_vignettes = TRUE` will slow down the install, but is necessary if 
-# you want to read the vignette, which is recommended
-library(wqbc)
-```
-
 Project Status
 --------------
 
-This package is under development. The user is responsible for checking all variables and limits that they use.
+This package is under active development and is not ready for use.
 
 Getting Help or Reporting an Issue
 ----------------------------------
 
-To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/wqbc/issues/).
+To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/wqindex/issues/).
 
 How to Contribute
 -----------------
