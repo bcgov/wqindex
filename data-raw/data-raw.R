@@ -12,7 +12,7 @@
 
 ## The overarching script to prepare data for the package
 
-library(wqbc) # rebuild package
+library(wqindex) # rebuild package
 source("data-raw/dummy.R")
 # source("data-raw/map-raw.R")
 source("data-raw/map.R")
