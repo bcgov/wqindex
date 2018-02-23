@@ -40,6 +40,7 @@ they should be specified in the keep argument.
 library(ggplot2)
 library(sp)
 library(rgdal)
+library(wqbc)
 
 data(fraser)
 plot_map(fraser)

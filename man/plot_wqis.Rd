@@ -22,11 +22,6 @@ Creates a ggplot2 scatterplot object with the
 y-limits expanded to include 0 and 100. Water Quality Index categories are
 indicated by the fill colour of points.
 }
-\examples{
-\dontrun{
- demo(fraser)
-}
-}
 \seealso{
 \code{\link{plot_map_wqis}}
 }

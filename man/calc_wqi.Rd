@@ -20,10 +20,8 @@ and optionally lower limits using the method detailed in the
 CCME Water Quality Index 1.0 User's Manual.
 }
 \details{
-The upper limits can be generated using the \code{\link{calc_limits}} function
-or can be provided by the user. In fact if x lacks both upper and lower limits
-then the \code{calc_limits} function is automatically called prior to
-calculating the WQI. If values are zero and detection limits are provided
+The upper limits can be generated using the \code{\link[wqbc:calc_limits]{wqbc::calc_limits()}} function
+or can be provided by the user. If values are zero and detection limits are provided
 then the values are set to be the detection limits. This is important when
 the variable has lower limits because otherwise the excursion will be infinity
 and it will not be possible to calculate the WQI. In this case \code{calc_wqi}
@@ -43,5 +41,5 @@ calc_wqi(ccme, messages = TRUE)
 calc_wqi(ccme, by = "Date", messages = TRUE)
 }
 \seealso{
-\code{\link{calc_limits}} and \code{\link{wqbc}}
+\code{\link[wqbc:calc_limits]{wqbc::calc_limits()}}
 }

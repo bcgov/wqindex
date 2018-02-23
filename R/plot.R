@@ -76,10 +76,6 @@ get_category_colours <- function () {
 #' to represent by the size of points.
 #' @param shape An integer of the point shape (permitted values are 21 to 25)
 #' or string of the column in data to represent by the shape of points.
-#' @examples
-#' \dontrun{
-#'  demo(fraser)
-#' }
 #' @seealso \code{\link{plot_map_wqis}}
 #' @export
 plot_wqis <- function (data, x = "Tests", size = 3, shape = 21) {
@@ -160,6 +156,7 @@ proj_bc <- function (data, x, y, input_proj = NULL) {
 #' library(ggplot2)
 #' library(sp)
 #' library(rgdal)
+#' library(wqbc)
 #'
 #' data(fraser)
 #' plot_map(fraser)
