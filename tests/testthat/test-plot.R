@@ -62,13 +62,14 @@ test_that("plot_map", {
   require(sp, quietly = TRUE)
   require(rgdal, quietly = TRUE)
 
-  data(fraser)
+  skip_if_not_installed("wqbc")
+  data(fraser, package = "wqbc")
   x <- plot_map(fraser)
   expect_is(x, "gg")
   expect_is(x, "ggplot")
 })
 
 test_that("plot_timeseries", {
-  expect_is(plot_timeseries(wqbc::ccme), "ggplot")
-  expect_is(plot_timeseries(wqbc::ccme, by = "Variable"), "list")
+  expect_is(plot_timeseries(wqindex::ccme), "ggplot")
+  expect_is(plot_timeseries(wqindex::ccme, by = "Variable"), "list")
 })

@@ -11,6 +11,6 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 library(testthat)
-library(wqbc)
+library(wqindex)
 
-test_check("wqbc")
+test_check("wqindex")
