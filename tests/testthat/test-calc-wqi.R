@@ -93,10 +93,10 @@ test_that("calc_wqi missing columns", {
   options(wqbc.messages = FALSE)
 
   expect_error(calc_wqi(data.frame()), regexp = "x must contain at least one row of data")
-  expect_error(calc_wqi(data.frame(Value = 1)), regexp = "x must contain columns Variable and Units")
-  expect_error(calc_wqi(data.frame(Variable = 1)), regexp = "x must contain columns Value and Units")
-  expect_error(calc_wqi(data.frame(Units = 1)), regexp = "x must contain columns Variable and Value")
-  expect_error(calc_wqi(data.frame(Value = 1, Variable = 1)), regexp = "x must contain column Units")
+  expect_error(calc_wqi(data.frame(UpperLimit = 1, Value = 1)), regexp = "x must contain column Variable")
+  expect_error(calc_wqi(data.frame(UpperLimit = 1, Variable = 1)), regexp = "x must contain column Value")
+  expect_error(calc_wqi(data.frame(UpperLimit = 1, Units = 1)), regexp = "x must contain columns Variable and Value")
+  expect_error(calc_wqi(data.frame(Units = 1, Value = 1, Variable = 1)), regexp = "x must contain at least one of LowerLimit and UpperLimit columns")
 })
 
 test_that("calc_wqi zero values", {
