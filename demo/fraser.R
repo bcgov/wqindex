@@ -15,6 +15,7 @@ library(lubridate)
 library(ggplot2)
 library(sp)
 library(rgdal)
+library(wqbc)
 
 options(wqbc.messages = TRUE)
 
@@ -24,13 +25,15 @@ print(summary(fraser))
 fraser$SiteID <-  factor(sub("BC08", "", as.character(fraser$SiteID)))
 fraser$Year <- year(fraser$Date)
 plot_map(fraser, fill = "SiteID")
-fraser <- calc_wqi(fraser, by = c("SiteID", "Lat", "Long"))
-plot_map_wqis(fraser, shape = "SiteID")
 
 data(fraser)
 fraser$Year <- year(fraser$Date)
+
+## Use wqbc functions to get the data ready:
 fraser <- standardize_wqdata(fraser, strict = FALSE)
 fraser <- clean_wqdata(fraser, by = "Year", max_cv = Inf)
 fraser <- calc_limits(fraser, by = "Year", term = "short")
+
+# Calculate and plot wqis on prepared data:
 fraser <- calc_wqi(fraser, by = "Year")
 plot_wqis(fraser, x = "Year")

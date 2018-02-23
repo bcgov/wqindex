@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 library(dplyr)
+library(wqbc)
 
 options(wqbc.messages = TRUE)
 
