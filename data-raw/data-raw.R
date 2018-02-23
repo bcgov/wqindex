@@ -14,17 +14,7 @@
 
 library(wqbc) # rebuild package
 source("data-raw/dummy.R")
-source("data-raw/codes.R")
-source("data-raw/limits.R")
-source("data-raw/site-limits.R")
-library(wqbc) # rebuild package
-# source("data-raw/fraser-raw.R")
-source("data-raw/fraser.R")
 # source("data-raw/map-raw.R")
 source("data-raw/map.R")
 source("data-raw/ccme.R")
 source("data-raw/data-internal.R")
-source("data-raw/ems-codes.R")
-source("data-raw/vmv-codes.R")
-source("data-raw/stations.R")
-source("data-raw/YuePilon_hydat_dataset.R")
