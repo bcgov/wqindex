@@ -1,8 +1,8 @@
 Package: wqindex
 Type: Package
 Title: Water Quality Index Calculation for British Columbia
-Version: 0.3.1.9000
-Date: 2017-05-30
+Version: 0.3.1.9001
+Date: 2018-08-17
 Authors@R: c(person("Joe", "Thorley", email = "joe@poissonconsulting.ca",
                     role = c("aut", "ctr"),
                     comment = "Primary author"),
@@ -26,7 +26,7 @@ Depends:
     R (>= 3.1.2)
 Imports:
     assertthat (>= 0.1),
-    datacheckr,
+    checkr,
     plyr (>= 1.8.1),
     dplyr (>= 0.4.1),
     magrittr,
@@ -47,6 +47,6 @@ Suggests:
 Remotes:
     bcgov/wqbc
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
-
+Encoding: UTF-8

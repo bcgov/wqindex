@@ -251,11 +251,11 @@ calc_wqi <- function (x, by = NULL,
   assert_that(is.null(by) || (is.character(by) && noNA(by)))
   assert_that(is.flag(messages) && noNA(messages))
 
-  check_rows(x)
+  check_nrow(x)
   if(!any(c("LowerLimit", "UpperLimit") %in% colnames(x)))
     error("x must contain at least one of LowerLimit and UpperLimit columns")
 
-  check_columns(x, c("Variable", "Value", "UpperLimit"))
+  check_colnames(x, c("Variable", "Value", "UpperLimit"))
 
   if(messages) message("Calculating water quality indices...")
 
@@ -289,7 +289,7 @@ calc_wqi <- function (x, by = NULL,
 
   x <- set_detection_limits(x, messages = messages)
 
-  check_rows(x)
+  check_nrow(x)
 
   if(is.null(by)) {
     x <- calc_wqi_by(x, messages = messages)
