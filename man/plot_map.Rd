@@ -4,8 +4,8 @@
 \alias{plot_map}
 \title{Plot Map}
 \usage{
-plot_map(data, x = "Long", y = "Lat", size = 3, shape = 21, fill = 10,
-  keep = NULL, input_proj = NULL)
+plot_map(data, x = "Long", y = "Lat", size = 3, shape = 21,
+  fill = 10, keep = NULL, input_proj = NULL)
 }
 \arguments{
 \item{data}{A data.frame with spatial information to map.}

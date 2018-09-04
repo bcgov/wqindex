@@ -91,7 +91,7 @@ plot_wqis <- function (data, x = "Tests", size = 3, shape = 21) {
   columns <- unique(c(x, ifelse(is.string(size), size, x),
                       ifelse(is.string(shape), shape, x)))
 
-  check_columns(data, columns)
+  check_colnames(data, columns)
 
   if(is.count(shape) && !shape %in% shape_values()) {
     stop("Shape must be a character vector or ",
@@ -185,7 +185,7 @@ plot_map <- function (data,  x = "Long", y = "Lat", size = 3, shape = 21, fill =
                       ifelse(is.string(shape), shape, x),
                       ifelse(is.string(fill), fill, x)))
 
-  check_columns(data, columns)
+  check_colnames(data, columns)
 
   if(is.count(shape) && !shape %in% shape_values()) {
     stop("Shape must be a character vector or ",
