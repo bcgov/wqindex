@@ -3,9 +3,11 @@
 
 # wqindex
 
-<a rel="Exploration" href="https://github.com/BCDevExchange/docs/blob/master/discussion/projectstates.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>[![Travis-CI
+[![img](https://img.shields.io/badge/Lifecycle-Dormant-ff7f2a)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+[![Travis-CI
 Build
-Status](https://travis-ci.org/bcgov/wqindex.svg?branch=master)](https://travis-ci.org/bcgov/wqindex)[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+Status](https://travis-ci.org/bcgov/wqindex.svg?branch=master)](https://travis-ci.org/bcgov/wqindex)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Overview
 
