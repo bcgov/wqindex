@@ -26,7 +26,6 @@ Depends:
     R (>= 3.1.2)
 Imports:
     assertthat (>= 0.1),
-    checkr,
     plyr (>= 1.8.1),
     dplyr (>= 0.4.1),
     magrittr,
@@ -34,7 +33,8 @@ Imports:
     stats,
     tibble,
     boot (>= 1.3-14),
-    tidyr (>= 0.2.0)
+    tidyr (>= 0.2.0),
+    chk
 Suggests:
     wqbc,
     testthat (>= 0.9.1),
