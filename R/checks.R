@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 check_class_columns <- function (x, columns) {
-  check_colnames(x, names(columns))
+  chk::check_names(columns)
 
   for(colname in names(columns)) {
     if(!class(x[[colname]]) %in% columns[[colname]])
