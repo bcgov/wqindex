@@ -4,8 +4,15 @@
 \alias{plot_map_wqis}
 \title{Plot Map of Water Quality Index Categories.}
 \usage{
-plot_map_wqis(data, x = "Long", y = "Lat", size = 3, shape = 21,
-  keep = NULL, input_proj = NULL)
+plot_map_wqis(
+  data,
+  x = "Long",
+  y = "Lat",
+  size = 3,
+  shape = 21,
+  keep = NULL,
+  input_proj = NULL
+)
 }
 \arguments{
 \item{data}{A data.frame of WQI values to plot.}

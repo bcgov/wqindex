@@ -22,7 +22,7 @@
 #'
 #' @docType package
 #' @name wqindex
-#' @import assertthat checkr
+#' @import assertthat
 #' @importFrom magrittr %<>% %>%
 #' @examples
 #' \dontrun{
