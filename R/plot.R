@@ -46,7 +46,7 @@ aes_string_point_expr <- function (head, tail, ...) {
   expr
 }
 
-aes_string_point <- function (head = "ggplot2::geom_point(ggplot2::aes_string(",
+aes_string_point <- function (head = "ggplot2::geom_point(ggplot2::aes(",
                               tail = ", colour = point_colour())", ...) {
 
   expr <- aes_string_point_expr(head = head, tail = tail, ...)
@@ -104,7 +104,7 @@ plot_wqis <- function (data, x = "Tests", size = 3, shape = 21) {
     ggplot2::ylab("Water Quality Index") + theme_wqis()
 
   gp <- gp + aes_string_point(
-    head = "ggplot2::geom_point(ggplot2::aes_string(fill = 'Category'",
+    head = "ggplot2::geom_point(ggplot2::aes(x=x, y=y, fill = 'Category'",
     size = size, shape = shape)
 
   if(is.string(shape))
@@ -198,8 +198,8 @@ plot_map <- function (data,  x = "Long", y = "Lat", size = 3, shape = 21, fill =
   gp <- ggplot2::ggplot(data, x = x, y = y) +
     ggplot2::geom_polygon(
       data = map,
-      ggplot2::aes_string(x = "Long", y = "Lat", group = "Group"),
-      fill = "grey80", size = 0.5, colour = "grey50"
+      ggplot2::aes(x = "Long", y = "Lat", group = "Group"),
+      fill = "grey80", linewidth = 0.5, colour = "grey50"
     ) + ggplot2::coord_fixed() + theme_map()
 
   gp <- gp + aes_string_point(size = size, shape = shape, fill = fill)
@@ -233,9 +233,9 @@ plot_map_wqis <- function (
 }
 
 plot_timeseries_by <- function(data, title = NULL, y0, size, messages) {
-  if (!is.null(title)) check_string(title)
+  if (!is.null(title)) chk::chk_string(title)
 
-  data %<>% dplyr::mutate(Detected = ~detected(Value, DetectionLimit))
+  data %<>% dplyr::mutate(., "Detected" = detected(Value, DetectionLimit))
 
   data$Detected %<>% factor(levels = c(TRUE, FALSE))
   data$Outlier %<>% factor(levels = c(TRUE, FALSE))
@@ -246,15 +246,15 @@ plot_timeseries_by <- function(data, title = NULL, y0, size, messages) {
 
   if (any(!is.na(data$Outlier))) {
     if (any(!is.na(data$Detected))) {
-      gp <- gp + ggplot2::geom_point(ggplot2::aes(color = "Outlier", alpha = "Detected"), size = size)
+      gp <- gp + ggplot2::geom_point(ggplot2::aes(x = "Date", y = "Value", color = "Outlier", alpha = "Detected"), size = size)
     } else
-      gp <- gp + ggplot2::geom_point(ggplot2::aes(color = "Outlier"), size = size)
+      gp <- gp + ggplot2::geom_point(ggplot2::aes(x = "Date", y = "Value", color = "Outlier"), size = size)
 
   } else {
     if (any(!is.na(data$Detected))) {
-      gp <- gp + ggplot2::geom_point(ggplot2::aes(alpha = "Detected"), size = size)
+      gp <- gp + ggplot2::geom_point(ggplot2::aes(x = "Date", y = "Value", alpha = "Detected"), size = size)
     } else
-      gp <- gp + ggplot2::geom_point(size = size)
+      gp <- gp + ggplot2::geom_point(size = size, aes(x = "Date", y = "Value"))
   }
 
   if (any(!is.na(data$Outlier)))
