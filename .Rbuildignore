@@ -8,3 +8,4 @@ CONTRIBUTING.md
 CODE_OF_CONDUCT.md
 vignettes_ignore
 ^COMPLIANCE\.yaml$
+^\.github$
