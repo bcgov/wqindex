@@ -92,11 +92,11 @@ test_that("calc_wqi missing columns", {
   on.exit(options(opts))
   options(wqbc.messages = FALSE)
 
-  expect_error(calc_wqi(data.frame()), regexp = "x must contain at least one of LowerLimit and UpperLimit columns")
-  expect_error(calc_wqi(data.frame(UpperLimit = 1, Value = 1)), regexp = "`names(x)` must include 'Variable'." )
-  expect_error(calc_wqi(data.frame(UpperLimit = 1, Variable = "a")), regexp = "`names(x)` must include 'Value'." )
-  expect_error(calc_wqi(data.frame(UpperLimit = 1, Units = "a")), regexp = "`names(x)` must include 'Variable' and 'Value'." )
-  expect_error(calc_wqi(data.frame(Units = "a", Value = 1, Variable = "a")), regexp = "x must contain at least one of LowerLimit and UpperLimit columns" )
+  expect_error(calc_wqi(data.frame()), regexp = "x must contain at least one of LowerLimit and UpperLimit columns", fixed = TRUE)
+  expect_error(calc_wqi(data.frame(UpperLimit = 1, Value = 1)), regexp = "`names(x)` must include 'Variable'.", fixed = TRUE)
+  expect_error(calc_wqi(data.frame(UpperLimit = 1, Variable = "a")), regexp = "`names(x)` must include 'Value'.", fixed = TRUE)
+  expect_error(calc_wqi(data.frame(UpperLimit = 1, Units = "a")), regexp = "`names(x)` must include 'Variable' and 'Value'.", fixed = TRUE)
+  expect_error(calc_wqi(data.frame(Units = "a", Value = 1, Variable = "a")), regexp = "x must contain at least one of LowerLimit and UpperLimit columns", fixed = TRUE)
 })
 
 test_that("calc_wqi zero values", {
