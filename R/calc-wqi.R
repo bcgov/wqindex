@@ -11,21 +11,19 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 get_excursions <- function (value, lower = NA_real_, upper = NA_real_) {
-  # assert_that(is.numeric(value))
-  # assert_that(is.numeric(lower))
-  # assert_that(is.numeric(upper)) 
+  assert_that(is.numeric(value))
+  assert_that(is.numeric(lower))
+  assert_that(is.numeric(upper))
   
-  less <- value <= lower
-  more <- value >= upper
+  less <- !is.na(lower) & value <= lower
+  more <- !is.na(upper) & value >= upper
   
-  if(!is.na(any(upper < lower)))
+  if(any(less & more))
     stop("the lower limit must be less than the upper limit")
   
   excursion <- rep(0, length(value))
-  e_u <- value/upper-1
-  e_l <- value/lower-1
-  
-  excursion = max(c(e_u, e_l), na.rm=TRUE)
+  excursion[more] <- value[more] / upper[more] - 1
+  excursion[less] <- lower[less] / value[less] - 1
   excursion
 }
 
