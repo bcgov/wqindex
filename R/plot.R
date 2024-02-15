@@ -46,7 +46,7 @@ aes_string_point_expr <- function (head, tail, ...) {
   expr
 }
 
-aes_string_point <- function (head = "ggplot2::geom_point(ggplot2::aes_string(",
+aes_string_point <- function (head = "ggplot2::geom_point(ggplot2::aes(",
                               tail = ", colour = point_colour())", ...) {
 
   expr <- aes_string_point_expr(head = head, tail = tail, ...)
@@ -91,20 +91,20 @@ plot_wqis <- function (data, x = "Tests", size = 3, shape = 21) {
   columns <- unique(c(x, ifelse(is.string(size), size, x),
                       ifelse(is.string(shape), shape, x)))
 
-  check_colnames(data, columns)
+  #check_colnames(data, columns)
 
   if(is.count(shape) && !shape %in% shape_values()) {
     stop("Shape must be a character vector or ",
          punctuate_strings(shape_values()), ".")
   }
 
-  gp <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = x, y = "WQI")) +
+  gp <- ggplot2::ggplot(data = data, x = x, y = "WQI") +
     ggplot2::expand_limits(y = c(0, 100)) +
     ggplot2::scale_fill_manual(values = get_category_colours()) +
     ggplot2::ylab("Water Quality Index") + theme_wqis()
 
   gp <- gp + aes_string_point(
-    head = "ggplot2::geom_point(ggplot2::aes_string(fill = 'Category'",
+    head = "ggplot2::geom_point(ggplot2::aes(x=x, y=y, fill = 'Category'",
     size = size, shape = shape)
 
   if(is.string(shape))
@@ -185,7 +185,7 @@ plot_map <- function (data,  x = "Long", y = "Lat", size = 3, shape = 21, fill =
                       ifelse(is.string(shape), shape, x),
                       ifelse(is.string(fill), fill, x)))
 
-  check_colnames(data, columns)
+  #check_colnames(data, columns)
 
   if(is.count(shape) && !shape %in% shape_values()) {
     stop("Shape must be a character vector or ",
@@ -195,11 +195,11 @@ plot_map <- function (data,  x = "Long", y = "Lat", size = 3, shape = 21, fill =
 
   data <- proj_bc(data, x = x, y = y, input_proj = input_proj)
 
-  gp <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y)) +
+  gp <- ggplot2::ggplot(data, x = x, y = y) +
     ggplot2::geom_polygon(
       data = map,
-      ggplot2::aes_string(x = "Long", y = "Lat", group = "Group"),
-      fill = "grey80", size = 0.5, colour = "grey50"
+      ggplot2::aes(x = "Long", y = "Lat", group = "Group"),
+      fill = "grey80", linewidth = 0.5, colour = "grey50"
     ) + ggplot2::coord_fixed() + theme_map()
 
   gp <- gp + aes_string_point(size = size, shape = shape, fill = fill)
@@ -225,7 +225,7 @@ plot_map <- function (data,  x = "Long", y = "Lat", size = 3, shape = 21, fill =
 plot_map_wqis <- function (
   data,  x = "Long", y = "Lat", size = 3, shape = 21, keep = NULL, input_proj = NULL) {
 
-  gp <- plot_map( data = data, x = x, y = y, size = size, shape = shape,
+  gp <- plot_map(data = data, x = x, y = y, size = size, shape = shape,
                   fill = "Category", keep = keep,
                   input_proj = input_proj)
 
@@ -233,28 +233,28 @@ plot_map_wqis <- function (
 }
 
 plot_timeseries_by <- function(data, title = NULL, y0, size, messages) {
-  if (!is.null(title)) check_string(title)
+  if (!is.null(title)) chk::chk_string(title)
 
-  data %<>% dplyr::mutate_(Detected = ~detected(Value, DetectionLimit))
+  data %<>% dplyr::mutate(., "Detected" = detected(Value, DetectionLimit))
 
   data$Detected %<>% factor(levels = c(TRUE, FALSE))
   data$Outlier %<>% factor(levels = c(TRUE, FALSE))
 
-  gp <- ggplot2::ggplot(data, ggplot2::aes_string(x = "Date", y = "Value"))
+  gp <- ggplot2::ggplot(data, x = "Date", y = "Value")
 
   if (!is.null(title)) gp <- gp + ggplot2::ggtitle(title)
 
   if (any(!is.na(data$Outlier))) {
     if (any(!is.na(data$Detected))) {
-      gp <- gp + ggplot2::geom_point(ggplot2::aes_string(color = "Outlier", alpha = "Detected"), size = size)
+      gp <- gp + ggplot2::geom_point(ggplot2::aes(x = "Date", y = "Value", color = "Outlier", alpha = "Detected"), size = size)
     } else
-      gp <- gp + ggplot2::geom_point(ggplot2::aes_string(color = "Outlier"), size = size)
+      gp <- gp + ggplot2::geom_point(ggplot2::aes(x = "Date", y = "Value", color = "Outlier"), size = size)
 
   } else {
     if (any(!is.na(data$Detected))) {
-      gp <- gp + ggplot2::geom_point(ggplot2::aes_string(alpha = "Detected"), size = size)
+      gp <- gp + ggplot2::geom_point(ggplot2::aes(x = "Date", y = "Value", alpha = "Detected"), size = size)
     } else
-      gp <- gp + ggplot2::geom_point(size = size)
+      gp <- gp + ggplot2::geom_point(size = size, aes(x = "Date", y = "Value"))
   }
 
   if (any(!is.na(data$Outlier)))
@@ -290,8 +290,8 @@ plot_timeseries <- function(data, by = NULL, y0 = TRUE, size = 1,
                             messages = getOption("wqbc.messages", default = TRUE)) {
   assert_that(is.null(by) || (is.character(by) && noNA(by)))
 
-  check_flag(y0)
-  check_flag(messages)
+  chk::chk_flag(y0)
+  chk::chk_flag(messages)
 
   check_by(by, colnames(data))
   if (!tibble::has_name(data, "DetectionLimit")) data$DetectionLimit <- NA_real_

@@ -14,13 +14,13 @@ get_excursions <- function (value, lower = NA_real_, upper = NA_real_) {
   assert_that(is.numeric(value))
   assert_that(is.numeric(lower))
   assert_that(is.numeric(upper))
-
+  
   less <- !is.na(lower) & value <= lower
   more <- !is.na(upper) & value >= upper
-
+  
   if(any(less & more))
     stop("the lower limit must be less than the upper limit")
-
+  
   excursion <- rep(0, length(value))
   excursion[more] <- value[more] / upper[more] - 1
   excursion[less] <- lower[less] / value[less] - 1
@@ -88,7 +88,7 @@ resample_wqi_column <- function (x, i) {
 
 bootstrap_wqis_column <- function (x, R) {
   x <- as.data.frame(x)
-  x <- tidyr::gather_(x, "Variable", "Excursion", colnames(x))
+  x <- tidyr::gather(x, "Variable", "Excursion", colnames(x))
   boot::boot(data = x, statistic = resample_wqi_column, R = R, strata = x$Variable)
 }
 
@@ -137,9 +137,9 @@ boot_wqis <- function (x) {
     stop("cesi_code not available at this time")
     # x <- dplyr::mutate_(x, Excursion = ~Excursion + 1)
   }
-  x <- dplyr::select_(x, ~Variable, ~Excursion, ~Date)
-  x <- tidyr::spread_(x, "Variable", "Excursion")
-  x <- dplyr::select_(x, ~-Date)
+  x <- dplyr::select(x, "Variable", "Date", "Excursion")
+  x <- tidyr::spread(x, "Variable", "Excursion")
+  x <- dplyr::select(x, -"Date")
   x <- as.matrix(x)
 
   if(cesi_code) {
@@ -172,10 +172,14 @@ calc_wqi_by <- function (x, messages) {
                           "DetectionLimit")]
   if(length(by))
     byc <- as.character(x[1,by,drop = FALSE])
-
-  x$Excursion <- get_excursions(x$Value, x$LowerLimit, x$UpperLimit)
+  x <- x |> 
+    dplyr::group_by("Variable") |> 
+    dplyr::mutate(Excursion = get_excursions(x$Value, x$LowerLimit, x$UpperLimit)) |> 
+    dplyr::ungroup()
+  
+  #x$Excursion <- get_excursions(x$Value, x$LowerLimit, x$UpperLimit)
   check_excursions(x)
-  x <- dplyr::select_(x, ~Excursion, ~Variable, ~Date)
+  x <- dplyr::select(x, "Excursion", "Variable", "Date")
 
   nt <- nrow(x)
   nv <- length(unique(x$Variable))
@@ -251,11 +255,11 @@ calc_wqi <- function (x, by = NULL,
   assert_that(is.null(by) || (is.character(by) && noNA(by)))
   assert_that(is.flag(messages) && noNA(messages))
 
-  check_nrow(x)
+  #check_nrow(x)
   if(!any(c("LowerLimit", "UpperLimit") %in% colnames(x)))
     error("x must contain at least one of LowerLimit and UpperLimit columns")
 
-  check_colnames(x, c("Variable", "Value", "UpperLimit"))
+  chk::check_names(x, c("Variable", "Value", "UpperLimit"), order=FALSE)
 
   if(messages) message("Calculating water quality indices...")
 
@@ -289,7 +293,7 @@ calc_wqi <- function (x, by = NULL,
 
   x <- set_detection_limits(x, messages = messages)
 
-  check_nrow(x)
+  #check_nrow(x)
 
   if(is.null(by)) {
     x <- calc_wqi_by(x, messages = messages)

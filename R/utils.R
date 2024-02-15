@@ -73,7 +73,7 @@ delete_rows_with_certain_values <- function (x, columns, messages, txt = "missin
   if(missing(columns))
     columns <- as.list(colnames(x))
 
-  check_colnames(x, unlist(columns))
+  #check_colnames(x, unlist(columns))
 
   if(txt %in% c("missing", "unrecognised")) {
     fun <- function (x) is.na(x)
@@ -115,7 +115,7 @@ is_match_words <- function (var, x, strict) {
 
 # from http://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
 is_color <- function(x) {
-  check_vector(x, "")
+  chk::chk_vector(x, "")
 
   fun <- function(x) {
     tryCatch(is.matrix(grDevices::col2rgb(x)),

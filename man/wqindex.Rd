@@ -3,7 +3,6 @@
 \docType{package}
 \name{wqindex}
 \alias{wqindex}
-\alias{wqindex-package}
 \title{Water Quality Index Calculation}
 \description{
 The wqindex package calculates water quality thresholds and indices for
