@@ -3,11 +3,9 @@
 
 # wqindex
 
-[![img](https://img.shields.io/badge/Lifecycle-Dormant-ff7f2a)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
-[![Travis-CI
+[![img](https://img.shields.io/badge/Lifecycle-Experimental-339999)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)[![Travis-CI
 Build
-Status](https://travis-ci.org/bcgov/wqindex.svg?branch=master)](https://travis-ci.org/bcgov/wqindex)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+Status](https://travis-ci.org/bcgov/wqindex.svg?branch=master)](https://travis-ci.org/bcgov/wqindex)[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Overview
 
@@ -27,6 +25,12 @@ for calculating the [CCME Water Quality
 Index](http://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html).
 
 ## Install
+
+``` r
+# install.packages("remotes") # if remotes is not installed
+remotes::install_github("bcgov/wqindex")
+library(wqindex)
+```
 
 ## Project Status
 
@@ -49,13 +53,13 @@ to abide by its terms.
 ## License
 
     Copyright 2015 Province of British Columbia
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at 
-    
+
        http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 # wqindex
 
-[![img](https://img.shields.io/badge/Lifecycle-Dormant-ff7f2a)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)[![Travis-CI Build Status](https://travis-ci.org/bcgov/wqindex.svg?branch=master)](https://travis-ci.org/bcgov/wqindex)[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![img](https://img.shields.io/badge/Lifecycle-Experimental-339999)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)[![Travis-CI Build Status](https://travis-ci.org/bcgov/wqindex.svg?branch=master)](https://travis-ci.org/bcgov/wqindex)[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Overview
 
@@ -26,6 +26,12 @@ British Columbia.
 This functions in this package were originally written as a part of the [wqbc](https://github.com/bcgov/wqbc) package for the B.C. Ministry of Environment by [Poisson Consulting](http://www.poissonconsulting.ca/). Ministry of Environment staff maintain the package. The original **wqbc** package is currently being split into two smaller pacakge. **wqbc** will be for cleaning, processing, and calculating limits/thresholds for water qualtity data, while this package will be for calculating the [CCME Water Quality Index](http://www.ccme.ca/en/resources/canadian_environmental_quality_guidelines/index.html).
 
 ## Install
+
+```{r install, message = FALSE, results = FALSE}
+# install.packages("remotes") # if remotes is not installed
+remotes::install_github("bcgov/wqindex")
+library(wqindex)
+```
 
 ## Project Status
 
