@@ -20,7 +20,7 @@
 #' information on the use of the wqbc package please type
 #' \code{vignette("wqindex")} at the R console.
 #'
-#' @docType package
+#' "_PACKAGE"
 #' @name wqindex
 #' @import assertthat
 #' @importFrom magrittr %<>% %>%

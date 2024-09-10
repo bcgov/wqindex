@@ -310,11 +310,27 @@ plot_timeseries <- function(data, by = NULL, y0 = TRUE, size = 1,
 }
 
 
-#' Radar chart
-#' @param data A data object from calc_wqi().
+#' Radar chart for visualizating relative contributions of water quality parameters to CCME index
+#' @param data A data object (wqitab) from calc_wqi().
 #' @export
 #' @examples
-#' radar_wqi(calc_wqi(ccme))
+#' radar_wqi(calc_wqi(ccme)$wqitab)
+radar_wqi <- function (data) {
+  data <- data |> 
+    arrange(Variable)
+  AOs_color <- c("grey40", "grey40",alpha("White", alpha = 0.0))
+  AOs_factor <- factor(data$AOs, levels=c("Above","Below", "Compliant"))
+  RI_ggplot <- ggplot2::ggplot(data, ggplot2::aes(x = Variable, y = RI)) +
+    ggplot2::geom_errorbar(ggplot2::aes(x = Variable, ymin = 0, ymax = RI),
+                           width = 0.1, colour = "grey40") +
+    ggplot2::geom_text(ggplot2::aes(x = Variable, y = RI + RI/10, label = Variable),
+                       colour = AOs_color[AOs_factor], size = 2) +
+    coord_radar(start = 0) +
+    ggplot2::theme_void()
+  
+  RI_ggplot
+  
+}
 
 ## 'coord_radar' function is adapted from the code of grizzly bear status indicator
 coord_radar <- function (theta = "x", start = 0, direction = 1, clip = "on") {
@@ -324,21 +340,4 @@ coord_radar <- function (theta = "x", start = 0, direction = 1, clip = "on") {
           direction = sign(direction),
           clip = clip,
           is_linear = function(coord) TRUE)
-}
-
-radar_wqi <- function (data) {
-  data <- data |> 
-    arrange(Variable)
-  AOs_color <- c("grey40", "grey40",alpha("White", alpha = 0.0))
-  AOs_factor <- factor(data$AOs, levels=c("Above","Below", "Compliant"))
-  RI_ggplot <- ggplot2::ggplot(data, ggplot2::aes(x = Variable, y = RI)) +
-  ggplot2::geom_errorbar(ggplot2::aes(x = Variable, ymin = 0, ymax = RI),
-                width = 0.1, colour = "grey40") +
-  ggplot2::geom_text(ggplot2::aes(x = Variable, y = RI + RI/10, label = Variable),
-            colour = AOs_color[AOs_factor], size = 2) +
-  coord_radar(start = 0) +
-  ggplot2::theme_void()
-
-RI_ggplot
-
 }

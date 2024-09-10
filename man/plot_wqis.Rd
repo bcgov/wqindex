@@ -4,7 +4,7 @@
 \alias{plot_wqis}
 \title{Plot Water Quality Indices}
 \usage{
-plot_wqis(data, x = "Tests", size = 3, shape = 21)
+plot_wqis(data, x, size = 3, shape = 21)
 }
 \arguments{
 \item{data}{A data.frame of WQI values to plot.}
