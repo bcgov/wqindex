@@ -1,4 +1,4 @@
-# Copyright 2015 Province of British Columbia
+# Copyright 2024 Province of British Columbia
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,24 +36,24 @@ test_that("ccme", {
 
   x <- calc_wqi(ccme)
 
-  expect_is(x, "data.frame")
-  expect_equal(nrow(x), 1)
-  expect_equal(colnames(x), c("WQI", "Lower", "Upper", "Category", "Variables", "Tests", "F1", "F2", "F3"))
-  expect_equal(round(x$WQI), 88)
-  expect_equal(round(x$Lower), 87)
-  expect_equal(round(x$Upper), 94)
-  expect_equal(as.character(x$Category), "Good")
+  expect_is(x$wqi, "data.frame")
+  expect_equal(nrow(x$wqi), 1)
+  expect_equal(colnames(x$wqi), c("WQI", "Lower", "Upper", "Category", "Variables", "Tests", "F1", "F2", "F3"))
+  expect_equal(round(x$wqi$WQI), 88)
+  expect_equal(round(x$wqi$Lower), 87)
+  expect_equal(round(x$wqi$Upper), 94)
+  expect_equal(as.character(x$wqi$Category), "Good")
 
   is.na(ccme$Value[ccme$Variable == "DO" & ccme$Date == as.Date("1997-03-04")]) <- TRUE
   x <- calc_wqi(ccme)
-  expect_equal(x$Variables, 10)
-  expect_equal(x$Tests, 102)
-  expect_equal(x$WQI, 88.1)
+  expect_equal(x$wqi$Variables, 10)
+  expect_equal(x$wqi$Tests, 102)
+  expect_equal(x$wqi$WQI, 88.1)
   is.na(ccme$Value[ccme$Variable == "As"]) <- TRUE
   x <- calc_wqi(ccme)
-  expect_equal(x$Variables, 9)
-  expect_equal(x$Tests, 90)
-  expect_equal(x$WQI, 86.8)
+  expect_equal(x$wqi$Variables, 9)
+  expect_equal(x$wqi$Tests, 90)
+  expect_equal(x$wqi$WQI, 86.8)
   is.na(ccme$Value[ccme$Variable == "As"]) <- TRUE
 })
 
@@ -64,14 +64,20 @@ test_that("ccme 4x4", {
 
   data(ccme)
 
-  expect_equal(nrow(calc_wqi(ccme)), 1)
-  expect_equal(nrow(calc_wqi(ccme[ccme$Variable == "DO",])), 0)
-  expect_equal(nrow(calc_wqi(ccme[ccme$Variable %in% c("DO","pH","TP"),])), 0)
-  expect_equal(nrow(calc_wqi(ccme[ccme$Variable %in% c("DO","pH","TP","TN"),])), 1)
+  expect_equal(nrow(calc_wqi(ccme)$wqi), 1)
+  expect_equal(nrow(calc_wqi(ccme[ccme$Variable == "DO",])$wqi), 0)
+  expect_equal(nrow(calc_wqi(ccme[ccme$Variable %in% c("DO","pH","TP"),])$wqi), 0)
+  expect_equal(nrow(calc_wqi(ccme[ccme$Variable %in% c("DO","pH","TP","TN"),])$wqi), 1)
   ccme <- plyr::ddply(ccme, "Variable", function (x) x[1:4,])
   ccme <- ccme[ccme$Variable %in% c("DO","pH","TP","TN"),]
-  expect_equal(nrow(calc_wqi(ccme)), 1)
-  expect_equal(nrow(calc_wqi(ccme[-1,])), 0)
+  expect_equal(nrow(calc_wqi(ccme)$wqi), 1)
+  expect_equal(nrow(calc_wqi(ccme[-1,])$wqi), 0)
+  
+  expect_equal(nrow(calc_wqi(ccme[ccme$Variable == "DO",])$wqitab), 0)
+  expect_equal(nrow(calc_wqi(ccme[ccme$Variable %in% c("DO","pH","TP"),])$wqitab), 0)
+  ccme <- plyr::ddply(ccme, "Variable", function (x) x[1:4,])
+  ccme <- ccme[ccme$Variable %in% c("DO","pH","TP","TN"),]
+  expect_equal(nrow(calc_wqi(ccme[-1,])$wqitab), 0)
 })
 
 test_that("calc_wqi by", {
@@ -82,9 +88,13 @@ test_that("calc_wqi by", {
   data(ccme)
   x <- calc_wqi(ccme, by = "Date")
 
-  expect_is(x, "data.frame")
-  expect_equal(nrow(x), 0)
-  expect_equal(colnames(x), c("Date", "WQI", "Lower", "Upper", "Category", "Variables", "Tests", "F1", "F2", "F3"))
+  expect_is(x$wqi, "data.frame")
+  expect_equal(nrow(x$wqi), 0)
+  expect_equal(colnames(x$wqi), c("Date", "WQI", "Lower", "Upper", "Category", "Variables", "Tests", "F1", "F2", "F3"))
+  
+  expect_is(x$wqitab, "data.frame")
+  expect_equal(nrow(x$wqitab), 0)
+  expect_equal(colnames(x$wqitab), c("Date", "Variable", "test", "Ctest", "Ftest", "F2", "excursion", "nse", "F3", "RI", "AOs"))
 })
 
 test_that("calc_wqi missing columns", {
@@ -107,9 +117,13 @@ test_that("calc_wqi zero values", {
 
   data(ccme)
   x <- data.frame(Variable = "Zinc Total", Value = 0, Units = "ug/L")
-  expect_is(calc_wqi(ccme), "data.frame")
+  expect_is(calc_wqi(ccme)$wqi, "data.frame")
+  expect_is(calc_wqi(ccme)$wqitab, "data.frame")
   ccme$Value <- 0
-  expect_error(calc_wqi(ccme), regexp = "Variables DO and pH have a LowerLimit and one or more zero Values with no defined DetectionLimit")
+  expect_error(calc_wqi(ccme)$wqi, regexp = "Variables DO and pH have a LowerLimit and one or more zero Values with no defined DetectionLimit")
+  expect_error(calc_wqi(ccme)$wqitab, regexp = "Variables DO and pH have a LowerLimit and one or more zero Values with no defined DetectionLimit")
   ccme$DetectionLimit <- 1
-  expect_is(calc_wqi(ccme), "data.frame")
+  expect_is(calc_wqi(ccme)$wqi, "data.frame")
+  expect_is(calc_wqi(ccme)$wqitab, "data.frame")
+  
 })

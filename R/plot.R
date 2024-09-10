@@ -1,11 +1,11 @@
-# Copyright 2015 Province of British Columbia
-#
+# Copyright 2024 Province of British Columbia
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
+# 
 # http://www.apache.org/licenses/LICENSE-2.0
-#
+# 
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
@@ -78,7 +78,7 @@ get_category_colours <- function () {
 #' or string of the column in data to represent by the shape of points.
 #' @seealso \code{\link{plot_map_wqis}}
 #' @export
-plot_wqis <- function (data, x = "Tests", size = 3, shape = 21) {
+plot_wqis <- function (data, x, size = 3, shape = 21) {
 
   assert_that(is.data.frame(data))
   assert_that(is.string(x))
@@ -104,7 +104,7 @@ plot_wqis <- function (data, x = "Tests", size = 3, shape = 21) {
     ggplot2::ylab("Water Quality Index") + theme_wqis()
 
   gp <- gp + aes_string_point(
-    head = "ggplot2::geom_point(ggplot2::aes(x=x, y=y, fill = 'Category'",
+    head = paste("ggplot2::geom_point(ggplot2::aes(x =", x, ", y = WQI, fill = 'Category'", sep = ""),
     size = size, shape = shape)
 
   if(is.string(shape))
@@ -307,4 +307,38 @@ plot_timeseries <- function(data, by = NULL, y0 = TRUE, size = 1,
     data %<>% plyr::dlply(.variables = by, .fun = plot_timeseries_fun, by = by, y0 = y0, size = size, messages = messages)
   }
   data
+}
+
+
+#' Radar chart
+#' @param data A data object from calc_wqi().
+#' @export
+#' @examples
+#' radar_wqi(calc_wqi(ccme))
+
+## 'coord_radar' function is adapted from the code of grizzly bear status indicator
+coord_radar <- function (theta = "x", start = 0, direction = 1, clip = "on") {
+  theta <- match.arg(theta, c("x", "y"))
+  r <- if (theta == "x") "y" else "x"
+  ggplot2::ggproto("CordRadar", ggplot2::CoordPolar, theta = theta, r = r, start = start,
+          direction = sign(direction),
+          clip = clip,
+          is_linear = function(coord) TRUE)
+}
+
+radar_wqi <- function (data) {
+  data <- data |> 
+    arrange(Variable)
+  AOs_color <- c("grey40", "grey40",alpha("White", alpha = 0.0))
+  AOs_factor <- factor(data$AOs, levels=c("Above","Below", "Compliant"))
+  RI_ggplot <- ggplot2::ggplot(data, ggplot2::aes(x = Variable, y = RI)) +
+  ggplot2::geom_errorbar(ggplot2::aes(x = Variable, ymin = 0, ymax = RI),
+                width = 0.1, colour = "grey40") +
+  ggplot2::geom_text(ggplot2::aes(x = Variable, y = RI + RI/10, label = Variable),
+            colour = AOs_color[AOs_factor], size = 2) +
+  coord_radar(start = 0) +
+  ggplot2::theme_void()
+
+RI_ggplot
+
 }

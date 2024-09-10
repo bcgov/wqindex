@@ -1,11 +1,11 @@
-# Copyright 2015 Province of British Columbia
-#
+# Copyright 2024 Province of British Columbia
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
+# 
 # http://www.apache.org/licenses/LICENSE-2.0
-#
+# 
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
@@ -25,6 +25,44 @@ get_excursions <- function (value, lower = NA_real_, upper = NA_real_) {
   excursion[more] <- value[more] / upper[more] - 1
   excursion[less] <- lower[less] / value[less] - 1
   excursion
+}
+
+get_excursions_variables <- function (value, lower = NA_real_, upper = NA_real_, x) {
+  assert_that(is.numeric(value))
+  assert_that(is.numeric(lower))
+  assert_that(is.numeric(upper))
+  
+  x <- x |> 
+    dplyr::group_by("Variable") |> 
+    dplyr::mutate(Excursion = get_excursions(value, lower, upper),
+                  AOs = rep(0, nrow(x))) |> 
+    dplyr::ungroup() 
+  
+  x$AOs[!is.na(lower) & value <= lower] <- -1
+  x$AOs[!is.na(upper) & value >= upper] <- 1
+  
+  wqitab <- x |>
+    dplyr::group_by(Variable) |>
+    dplyr::summarise(
+      test = dplyr::n(),
+      Ctest = sum(Excursion == 0),
+      Ftest = sum(Excursion != 0), 
+      F2 = sum(Excursion != 0)/nrow(x) * 100,
+      excursion = sum(Excursion),
+      nse = sum(Excursion)/nrow(x),
+      F3 = nse / (nse + 1) * 100,
+      RI = sqrt (F2^2 + F3^3),
+      AOs = sum(AOs)) |>
+    dplyr::ungroup() 
+  
+  wqitab <- wqitab |> 
+    dplyr::mutate(AOs = dplyr::case_when(AOs>0 ~ "Above", 
+                                         AOs==0 ~ "Compliant", 
+                                         AOs>0 ~ "Below")) |>
+    dplyr::arrange(AOs)
+  
+  wqitab
+  
 }
 
 #' Categorize Water Quality Indices
@@ -166,7 +204,7 @@ fourtimesfour <- function (x) {
   nrow(x) >= 4
 }
 
-calc_wqi_by <- function (x, messages) {
+calc_wqi_by <- function (x, messages = getOption("wqbc.messages", default = TRUE)) {
   by <- colnames(x)
   by <- by[!by %in% c("Date", "Variable", "Value", "UpperLimit", "LowerLimit",
                           "DetectionLimit")]
@@ -179,6 +217,9 @@ calc_wqi_by <- function (x, messages) {
   
   #x$Excursion <- get_excursions(x$Value, x$LowerLimit, x$UpperLimit)
   check_excursions(x)
+  
+  wqitab <- get_excursions_variables(x$Value, x$LowerLimit, x$UpperLimit, x=x)
+  
   x <- dplyr::select(x, "Excursion", "Variable", "Date")
 
   nt <- nrow(x)
@@ -192,7 +233,9 @@ calc_wqi_by <- function (x, messages) {
                     Variables = nv, Tests = nt,
                     F1 = round(wqi["F1"], 1), F2 = round(wqi["F2"], 1),
                     F3 = round(wqi["F3"], 1))
-
+  
+  wqi <- c(wqi = list(wqi), wqitab = list(wqitab)) 
+  
   if(!fourtimesfour(x)) {
 
     if(messages) {
@@ -203,7 +246,7 @@ calc_wqi_by <- function (x, messages) {
       } else
         message("Dropped WQI with less than four variables sampled at least four times.")
     }
-    wqi <- wqi[F,,drop = FALSE]
+    wqi <- c(wqi = list(wqi$wqi[F,,drop = FALSE]), wqitab = list(wqi$wqitab[F,,drop = FALSE]))
   }
   wqi
 }
@@ -298,8 +341,20 @@ calc_wqi <- function (x, by = NULL,
   if(is.null(by)) {
     x <- calc_wqi_by(x, messages = messages)
   } else {
-    x <- plyr::ddply(x, .variables = by, .fun = calc_wqi_by,
-                     messages = messages)
+    
+    list_wqi <- sapply(lapply(split(x, x[,by]),calc_wqi_by), "[", "wqi")
+    names(list_wqi) <- gsub('.wqi', '', names(list_wqi))
+    dat_wqi<- as.data.frame(bind_rows(list_wqi, .id = by))
+    if (nrow(dat_wqi) != 0) {
+      rownames(dat_wqi) <- c(1:nrow(dat_wqi))
+    }
+    
+    list_wqitab <- sapply(lapply(split(x, x[,by]),calc_wqi_by), "[", "wqitab")
+    names(list_wqitab) <- gsub('.wqitab', '', names(list_wqitab))
+    dat_wqitab<- as.data.frame(bind_rows(list_wqitab, .id = by))
+    
+    x <- c(wqi = list(dat_wqi), wqitab= list(dat_wqitab))
+    
   }
   if(messages) message("Calculated water quality indices.")
   x
