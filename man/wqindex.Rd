@@ -2,6 +2,7 @@
 % Please edit documentation in R/package.R
 \docType{package}
 \name{wqindex}
+\alias{wqindex-package}
 \alias{wqindex}
 \title{Water Quality Index Calculation}
 \description{
@@ -23,4 +24,22 @@ information on the use of the wqbc package please type
 \seealso{
 \code{\link{calc_wqi}}
 and \code{\link{plot_wqis}}
+}
+\author{
+\strong{Maintainer}: Karly Harker \email{karly.harker@gov.bc.ca} [contributor]
+
+Authors:
+\itemize{
+  \item Joe Thorley \email{joe@poissonconsulting.ca} (Primary author) [contractor]
+  \item Colin Millar \email{colinpmillar@gmail.com} [contractor]
+  \item Andy Teucher \email{andy.teucher@gov.bc.ca}
+}
+
+Other contributors:
+\itemize{
+  \item Wendy Wang [contributor, contractor]
+  \item Robyn Irvine [contributor, contractor]
+  \item Province of British Columbia [copyright holder]
+}
+
 }
