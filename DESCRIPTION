@@ -3,18 +3,16 @@ Type: Package
 Title: Water Quality Index Calculation for British Columbia
 Version: 0.3.1.9001
 Date: 2018-08-17
-Authors@R: c(person("Joe", "Thorley", email = "joe@poissonconsulting.ca",
-                    role = c("aut", "ctr"),
-                    comment = "Primary author"),
-	     	 person("Colin", "Millar", email = "colinpmillar@gmail.com",
-	     	        role = c("aut", "ctr")),
-	     	 person("Andy", "Teucher", email = "andy.teucher@gov.bc.ca",
-	     	        role = c("aut", "cre")),
-	     	 person("Wendy", "Wang", role = c("ctb", "ctr")),
-	     	 person("Stephanie", "Hazlitt", email = "stephanie.hazlitt@gov.bc.ca",
-	     	        role = "ctb"),
-	     	 person("Robyn", "Irvine", role = c("ctb", "ctr")),
-	     	 person("Province of British Columbia", role = "cph"))
+Authors@R: c(
+    person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = c("aut", "ctr"),
+           comment = "Primary author"),
+    person("Colin", "Millar", , "colinpmillar@gmail.com", role = c("aut", "ctr")),
+    person("Andy", "Teucher", , "andy.teucher@gov.bc.ca", role = c("aut")),
+    person("Wendy", "Wang", role = c("ctb", "ctr")),
+    person("Robyn", "Irvine", role = c("ctb", "ctr")),
+    person("Province of British Columbia", role = "cph"),
+    person("Karly", "Harker", , "karly.harker@gov.bc.ca", role = c("cre", "ctb"))
+  )
 Description: Calculates water quality thresholds and water quality indices
     and plots water quality indices spatially and temporally for
     British Columbia.
@@ -47,6 +45,6 @@ Suggests:
 Remotes:
     bcgov/wqbc
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
